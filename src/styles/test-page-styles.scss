@@ -1,0 +1,13 @@
+.foo {
+    color: red;
+
+    &-bar {
+        color: pink;
+
+        mask: blue;
+    }
+}
+
+p {
+    color: green;
+}

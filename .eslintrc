@@ -40,7 +40,8 @@
             "error",
             {
                 "devDependencies": [
-                    "./postcss.config.js"
+                    "./postcss.config.js",
+                    "./webpack.config.js"
                 ]
             }
         ],

@@ -1,24 +1,27 @@
-const glob = require('glob');
+const {
+    CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 const fs = require('fs');
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 const PAGE_DIRECTORY = './src/pages/';
 
 module.exports = () => {
     const {
         env: {
-            NODE_ENV
+            WEBPACK_WATCH
         }
     } = process;
 
-    const isDevelopment = NODE_ENV === 'development';
+    const shouldWatchFiles = WEBPACK_WATCH === 'true';
 
     const fileList = fs.readdirSync(path.resolve(__dirname, PAGE_DIRECTORY));
 
     const filteredFileList = fileList.filter((file) => {
         const [
-            fileName,
+            fileName, // eslint-disable-line no-unused-vars
             fileExtension
         ] = file.split('.');
 
@@ -31,6 +34,13 @@ module.exports = () => {
     }));
 
     return ({
+        devServer: {
+            contentBase: path.join(__dirname, 'dist'),
+            hot: true,
+            https: true,
+            open: true,
+            port: 3000
+        },
         entry: './src/javascript/index.js',
         module: {
             rules: [
@@ -45,7 +55,7 @@ module.exports = () => {
                     test: /\.scss$/,
                     use: [
                         {
-                            loader: 'style-loader'
+                            loader: MiniCssExtractPlugin.loader
                         },
                         {
                             loader: 'css-loader'
@@ -58,12 +68,16 @@ module.exports = () => {
             ]
         },
         output: {
-            filename: 'main.js',
+            filename: 'main.[hash].js',
             path: `${__dirname}/dist`,
             publicPath: '/'
         },
         plugins: [
-            ...generatedHTMLPlugins
+            ...generatedHTMLPlugins,
+            new CleanWebpackPlugin(),
+            new MiniCssExtractPlugin({
+                filename: 'styles.[hash].css'
+            })
         ],
         resolve: {
             extensions: [
@@ -71,6 +85,6 @@ module.exports = () => {
                 '.js'
             ]
         },
-        watch: isDevelopment
+        watch: shouldWatchFiles
     });
 };
