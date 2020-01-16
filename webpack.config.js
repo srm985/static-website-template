@@ -1,6 +1,7 @@
 const {
     CleanWebpackPlugin
 } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -36,7 +37,6 @@ module.exports = () => {
     return ({
         devServer: {
             contentBase: path.join(__dirname, 'dist'),
-            hot: true,
             https: true,
             open: true,
             port: 3000
@@ -61,6 +61,9 @@ module.exports = () => {
                             loader: 'css-loader'
                         },
                         {
+                            loader: 'postcss-loader'
+                        },
+                        {
                             loader: 'sass-loader'
                         }
                     ]
@@ -77,7 +80,13 @@ module.exports = () => {
             new CleanWebpackPlugin(),
             new MiniCssExtractPlugin({
                 filename: 'styles.[hash].css'
-            })
+            }),
+            new CopyPlugin([
+                {
+                    from: `${__dirname}/public`,
+                    to: `${__dirname}/dist/public`
+                }
+            ])
         ],
         resolve: {
             extensions: [

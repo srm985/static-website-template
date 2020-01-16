@@ -1,1 +1,9 @@
-@import './test-page-styles';
+// Global Styling Import
+@import './global';
+
+// Component Styling Imports
+@import './footer';
+
+// Page Styling Imports
+@import './index';
+@import './second-page';
