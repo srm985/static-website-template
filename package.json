@@ -35,8 +35,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "cross-env FORCE_COLOR=true lint-staged",
-      "pre-push": "node ./scripts/branchCheck.js"
+      "pre-commit": "cross-env FORCE_COLOR=true lint-staged"
     }
   },
   "license": "MIT",
